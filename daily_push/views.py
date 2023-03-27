@@ -41,3 +41,16 @@ class ArticleByIdAPIView(APIView):
         article = self.get_object(article_id)
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
+
+@api_view(['GET'])
+def search_articles(request):
+    """
+    通过关键字搜索文章
+    """
+    keyword = request.query_params.get('keyword')
+    if not keyword:
+        return Response({'error': 'keyword is required'}, status=status.HTTP_400_BAD_REQUEST)
+    keyword = request.GET.get('keyword')
+    articles = Article.objects.filter(title__contains=keyword)
+    serializer = ArticleSerializer(articles, many=True)
+    return Response(serializer.data)
