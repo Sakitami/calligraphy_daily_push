@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
 from .models import Article
@@ -49,8 +50,13 @@ def search_articles(request):
     """
     keyword = request.query_params.get('keyword')
     if not keyword:
-        return Response({'error': 'keyword is required'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': '关键字不能为空'})
     keyword = request.GET.get('keyword')
     articles = Article.objects.filter(title__contains=keyword)
+    articles_content = Article.objects.filter(content__contains=keyword)
+    serializer_content = ArticleSerializer(articles_content, many=True)
     serializer = ArticleSerializer(articles, many=True)
-    return Response(serializer.data)
+    data_ori = serializer.data+serializer_content.data
+    data_pre = list(set(data_ori))
+    
+    return Response()
