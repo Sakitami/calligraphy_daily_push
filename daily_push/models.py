@@ -16,3 +16,14 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title + ' - ' + str(self.date)
+
+class Knowledge(models.Model):
+    id = models.AutoField(primary_key=True)
+    date = models.DateField(help_text='文章日期，格式为YYYY-MM-DD')
+    classification = models.CharField(max_length=50)
+    article = models.TextField()
+    author = models.CharField(max_length=45, default='李白')
+    title = models.CharField(max_length=255, default='test')
+
+    def __str__(self):
+        return self.title + ' - ' + str(self.date)

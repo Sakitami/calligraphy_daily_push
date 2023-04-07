@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from daily_push.views import ArticleByDateAPIView, ArticleByIdAPIView, search_articles
+from daily_push.views import ArticleByDateAPIView, ArticleByIdAPIView, search_articles, search_knowledge
 from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('by_date/<date>/', ArticleByDateAPIView.as_view(), name='article_by_date'),
     path('by_id/<article_id>/', ArticleByIdAPIView.as_view(), name='article_by_id'),
-    path('search/', search_articles, name='search_articles'),
+    path('search/daily/', search_articles, name='search_articles'),
+    path('search/knowledge/', search_knowledge, name='search_articles'),
     path('docs/', include_docs_urls(title='Calligraphy API'))
 ]

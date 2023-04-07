@@ -90,9 +90,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'calligraphy_db',
-        'USER': 'root',
-        'PASSWORD': 'HWs0712IloveU',
-        'HOST': '127.0.0.1',
+        'USER': 'shufa',
+        'PASSWORD': 'fjidj8943ujdio93',
+        'HOST': '45.32.94.51',
         'PORT': '3306',
     }
 }

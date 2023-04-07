@@ -4,9 +4,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.utils.serializer_helpers import ReturnList
 from rest_framework import generics
-from .models import Article
-from .serializers import ArticleSerializer
+from .models import Article, Knowledge
+from .serializers import ArticleSerializer, KnowledgeSerializer
 
 from django.utils import timezone
 
@@ -56,7 +57,21 @@ def search_articles(request):
     articles_content = Article.objects.filter(content__contains=keyword)
     serializer_content = ArticleSerializer(articles_content, many=True)
     serializer = ArticleSerializer(articles, many=True)
-    data_ori = serializer.data+serializer_content.data
-    data_pre = list(set(data_ori))
     
-    return Response()
+    return Response(ReturnList(serializer.data+serializer_content.data, serializer=serializer))
+
+@api_view(['GET'])
+def search_knowledge(request):
+    """
+    通过关键字搜索知识
+    """
+    keyword = request.query_params.get('keyword')
+    if not keyword:
+        return Response({'error': '关键字不能为空'})
+    keyword = request.GET.get('keyword')
+    articles = Knowledge.objects.filter(title__contains=keyword)
+    articles_content = Knowledge.objects.filter(article__contains=keyword)
+    serializer_content = KnowledgeSerializer(articles_content, many=True)
+    serializer = KnowledgeSerializer(articles, many=True)
+    
+    return Response(ReturnList(serializer.data+serializer_content.data, serializer=serializer))
